@@ -1,0 +1,64 @@
+Echo State Network ESN: a type of RNN designed for processing sequential data. consists of three main components; an input layer, a fixed and randomly initialized reservoir of recurrent neurons, output layer. ESNs captures and reproduces temporal atterns in sequential data,'. dynamic. 
+reservoir serves as a dynamic memory of randomly initialized recurrent neurons.
+training involves linear regression or pseudoinverse to map the reservoir states to the desired output.
+
+major advantage of reservoir computing compared to other recurrent neural networks is fast learning, resulting in low training cost
+
+04.11.2024
+sami yoktu,aleksander ile project rapportun detaylarini konustuk. chaos theory ve different kind of chaotic maps. we have started to try the import the actual data in the google colab and started live coding together with the team members. we went through the next steps; visualizing the data, modelling one time at a step. discrete dynamic system is highly sensitive to initial conditions, a key feature of chaotic systems.
+
+20.01.2025
+Sintefte ilk calisma gunumuzdu.Bize gonderilen datalari kabaca inceledik ve aleksander ve signe ile toplanti yaptik. toplantida data ve surec hakkinda merak ettigimiz seyleri sorduk ve tartistik. tartistigimiz konular soyleydi: datada cok fazla null verdi olmasi. datada iki kez peak yapmasi: bu peak yaptigi kisimlar morning ve evening oluyor cunku insanlar o saatlerde cok enerji kullaniyor. syntetisk data interpolate yapilabilir mi diye sorduk ve bunun mantiksiz oldugunu ogrendik cunku ornegin komple bir mevsim verisi null ise koskoca bir mevsimi sentetik data ile olusturmamiz mantiksiz olur ve bize gercek degerler sunmaz cunku enerji datasi dalgalanmaya yatkin kisin enerji tuketimi fazlayken yazin azaliyor yani mevsimlere gore degisiklik gosteriyor. Null dataya cozum olarak aleksanderdan su tavsiyeyi aldik: null datayi visualisinge ekleyecegiz ve ornegin bu kisimlarda null data olarak plotta gosterecegiz.
+
+Ayrica coding ve rapportun es zamanli gitmesi gerektigi hakkinda tavsiye aldik.
+
+Onumuzdeki haftanin planlamasini yaptik. Birincisi: Datayi anlamak icin visualize edecegiz. Ikincisi: reservoir computing hakkinda okumalar yapip daha cok bilgi edinecegiz. 
+
+24 januar
+By default, matplotlib skips plotting lines for NaN values, resulting in gaps in the plot where data is missing.
+
+excel dosyasindan en optimal sekilde pandas ile read etmeye calistik. time formati dogru olmadigi icin verileri count ile manuell sekilde okutturduk. aradaki linelari da count yaptigi icin 2014 dosyasindaki veriler plotta 2015e sarkti. bu sorunu cozduk. 
+
+27 januar
+Time formati manuell olarak duzeltip scripti sadece 2014 yili veriseti icin denendi, butun 10 senelik dataseti kullanarak calistirildi ve sorunsuz bir sekilde ciktilari verdi. Böylelikle, tahmin edilen enerji kullanimi ve aslinda kullanilan enerjinin 2014-2024 arasi nasil seyir ettigi analiz edilebilir. Bu durum enerji kullaniminin dönem dönem nasil yukselip alcaldigini ve tahmin edilen ile asil olan arasindaki farklar gösteriyor.
+
+28 januar
+Veriyi taniyip anlayabilmek icin tahmin edilen enerji kullaniminin ve asil enerji kullanimin mean, max ve min ciktisi alindi. 
+Hangi yillarda ne kadar missing values oldugunu yila gore ortaya cikarildi. 
+
+Plot ciktilari yil yil plotlari ayri ayri kaydetmesi icin bir kod yazidli. Islemden gecmis verileri dataset halinde combined_data.csv olarak kaydedildi.
+
+29 januar
+Missing values inceleme sonucunda Tahmin edilen enerji kullaniminda 12806 ve asil enerji kullaniminda ise 12835 missing values oldugu tespit edildi.
+
+yillara göre artan tahmin edilen verideki hata(Forecast Error Over Time) payini gösteren bir plot ciktisi ile 2014 sonundan 2015 e tahmin edileni nasil degistigini analiz edebilirz.
+
+30 januar
+Tahmin edilen ve asil olan verilerin aylik ortalamayi gösteren tablo ciktisi olusturuldu. 
+toplam null values ve datasetin yüzde kaci oldugunu gösteren bir tablo olusturuldu.
+Missing data heatmap plot ciktisi ile yillara gore zamanla nerelerde missingvalues oldugu gorunuyor.
+
+time series vizualize etme denemelerimde zaman problemi ile karsilastim, yani zamani asil zaman olarak cekmemesi manuel olarak ayar yapmanin time series gibi bazi acilardan problem olsuturacagi ihtimallerini goz onunde bulundurup hata payini mumkun mertebe azaltmak lazim.
+
+03 february
+Noted what have been done so far and structured all output, plot, code and markdowns tp get readable notebook. did checklist of what have been done and what is missing to go to next step to modeling.
+completed steps are Data cleaning & Preperation, Data Exploration & Summary Statistics, Data Visualisations & Trend Analysis, Handling Large Datasets.
+missing steps are Feature Engineering & Transformations, Outlier Detection & Handling, Correlation Analysis, Sesonality & Trend Analysis, Data Imbalance Check.
+
+17 february
+We had a problem with plots where it was a lot of gaps between hours cause of 24 hour calculation and summer/winter time change. We did meeting with Alexander where we got suggestion to do patern match instead of calculating so the data will just include values of days just under the pattern match dates. the solution will ignore empty lines and dates and include just values. this solution worked on th datasets and we got plots continiously without gap. this fixed a lot of missing values. now we have 1 missing values each year except 2014 and 2024 which they have 8500 and 1500 missing data. Now we have done with cleaning data part we have moved on with feature enginering. 
+
+
+19 february
+We have used rolling windows of 6 hours and 24 hours. Each rolling window shifts forward by 1 hour, incorporating the next 5 hours for the 6-hour window and the next 23 hours for the 24-hour window. This helps capture trends by comparing short-term (6-hour) and long-term (24-hour) variations. The rolling windows also highlight differences between weekdays and weekends, along with other important patterns in the data. Additionally, we have introduced lag features for 1 hour and 24 hours. The 1-hour lag helps capture immediate short-term dependencies in the data, allowing the model to learn from the most recent past values. The 24-hour lag is chosen to capture daily patterns, as electricity load often follows a repeating cycle based on time of day. These lag features help improve the model’s ability to predict future load by incorporating past behavior.
+
+3 april
+sarimax esn ve gbd denedik ve sarimax kotu performans verdi. joblit lib kullanarak run etme suresini 8 dakikadan 4 dakikaya indirdik
+
+13 april
+prophet ekledik ve esnden sonra en iyi model prophet ama hala esni gecemedi. aleksandera danisacagiz cunku prophet daha iyi cikar demisti. 
+Next steps:
+error plotlara propheti de ekleyecegiz claude da yap daha guzel visualize ediyor. 
+
+21 april
+Signe feedbacklerinden sonra standart scaler denedik ama minmax scaler daha iyi sonuclar verdi. Time decompositionu degistirdik ve model performansi artti
